@@ -2,14 +2,19 @@
   "name": "doctors-query-fmge-razorpay-server",
   "version": "1.0.0",
   "private": true,
-  "description": "Doctors Query FMGE Academy secure Razorpay backend with SQLite enrollment database",
+  "description": "Doctors Query FMGE Academy secure Razorpay backend with PostgreSQL enrollment database",
   "main": "server.js",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "pg": "^8.16.3",
     "razorpay": "^2.9.6"
   }
 }
