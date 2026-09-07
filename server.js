@@ -195,7 +195,7 @@ app.post('/api/create-order', async (req, res) => {
     await pool.query(
       `INSERT INTO enrollments
         (enrollment_id,status,created_at,name,whatsapp,email,country,university,year,razorpay_order_id,payment_status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
       [
         enrollmentId, 'pending', now,
         clean(student.name), clean(student.whatsapp), clean(student.email), clean(student.country), clean(student.university), clean(student.year),
