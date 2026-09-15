@@ -5,7 +5,7 @@
   "description": "Doctors Query FMGE Academy secure Razorpay backend with PostgreSQL enrollment database",
   "main": "server.js",
   "scripts": {
-    "start": "node patch-content-V23.js && node server.js"
+    "start": "node patch-content-V24.js && node server.js"
   },
   "engines": {
     "node": ">=22"
