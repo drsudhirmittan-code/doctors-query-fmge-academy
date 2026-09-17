@@ -176,10 +176,12 @@ async function v32RateLimit(req, key, limit) {
 async function v32ScrubLegacyActivationPasswords() {
   try {
     // Legacy V31 activation tokens contained plaintext temporary passwords.
-    // They are no longer usable under V32-A, so remove the sensitive value directly.
-    await pool.query('UPDATE student_activation_tokens SET temporary_password = NULL WHERE temporary_password IS NOT NULL');
+    // V32-A replaces that flow with one-time setup/reset links, so legacy
+    // activation tokens are obsolete. Delete them rather than attempting to
+    // write NULL into the legacy NOT NULL temporary_password column.
+    await pool.query('DELETE FROM student_activation_tokens');
   } catch (e) {
-    console.error('V32-A legacy activation scrub warning:', e.message);
+    console.error('V32-A legacy activation cleanup warning:', e.message);
   }
 }
 
