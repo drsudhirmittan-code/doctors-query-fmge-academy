@@ -7,6 +7,10 @@ const V31_PATCH = path.join(ROOT, 'patch-student-portal-V31-CORRECTED 2.js');
 
 if (fs.existsSync(V31_PATCH)) require(V31_PATCH);
 
+// V32-A is cumulative: apply it only after the V31.1/V31 server has been generated.
+const V32_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.js');
+if (fs.existsSync(V32_PATCH)) require(V32_PATCH);
+
 const serverFile = path.join(ROOT, 'server.js');
 if (!fs.existsSync(serverFile)) process.exit(0);
 
