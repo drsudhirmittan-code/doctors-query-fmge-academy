@@ -14,14 +14,14 @@ if (fs.existsSync(V32_PATCH)) require(V32_PATCH);
  // Email OTP registration flow was intentionally removed. Registration returns
  // to the original details -> payment flow; V32-A secure student passwords remain active.
 
+const V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.5-Dashboard-Change-Password-Robust.js');
+if (fs.existsSync(V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST_PATCH)) require(V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST_PATCH);
 const V32_A2_PASSWORD_READY_EMAIL_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.2-Password-Ready-Email.js');
 if (fs.existsSync(V32_A2_PASSWORD_READY_EMAIL_PATCH)) require(V32_A2_PASSWORD_READY_EMAIL_PATCH);
 const V32_A3_CHANGE_PASSWORD_VISIBILITY_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.3-Change-Password-Visibility.js');
 if (fs.existsSync(V32_A3_CHANGE_PASSWORD_VISIBILITY_PATCH)) require(V32_A3_CHANGE_PASSWORD_VISIBILITY_PATCH);
 const V32_A4_DASHBOARD_CHANGE_PASSWORD_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.4-Dashboard-Change-Password.js');
 if (fs.existsSync(V32_A4_DASHBOARD_CHANGE_PASSWORD_PATCH)) require(V32_A4_DASHBOARD_CHANGE_PASSWORD_PATCH);
-const V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.5-Dashboard-Change-Password-Robust.js');
-if (fs.existsSync(V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST_PATCH)) require(V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST_PATCH);
 
 
 const serverFile = path.join(ROOT, 'server.js');
