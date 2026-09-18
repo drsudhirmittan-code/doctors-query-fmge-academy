@@ -211,6 +211,50 @@ function v32PasswordCorsGuard(req, res, next) {
   next();
 }
 
+// DQ_V32_INTEGRATED_PASSWORD_EMAIL
+async function v32SendPasswordReadyEmailV32Integrated(account, eventName) {
+  const apiKey = process.env.RESEND_API_KEY || '';
+  const from = process.env.PASSWORD_EMAIL_FROM || '';
+  const appUrl = process.env.PASSWORD_APP_URL || 'https://doctorsqueryfmgeacademy.com';
+  if (!apiKey || !from) throw new Error('Resend password email configuration is missing.');
+  if (!account || !account.email) throw new Error('Student account email is missing.');
+
+  const loginUrl = appUrl.replace(/\/$/, '') + '/student-login';
+  const text = [
+    'Doctors Query FMGE Academy',
+    '',
+    'Your password has been successfully created or changed.',
+    '',
+    'Student ID: ' + account.student_id,
+    '',
+    'You can now log in to the Student Portal using your Student ID and the new password.',
+    '',
+    'Student Portal Login:',
+    loginUrl,
+    '',
+    'Please keep your Student ID and password secure.',
+    'If you did not make this password change, please contact Doctors Query FMGE Academy.'
+  ].join('\n');
+
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + apiKey,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      from,
+      to: [account.email],
+      subject: 'Your FMGE Academy password is ready',
+      text
+    })
+  });
+
+  const body = await response.text().catch(() => '');
+  if (!response.ok) throw new Error('Resend ' + response.status + ': ' + body.slice(0, 500));
+  console.log('V32 integrated password confirmation email sent:', eventName, account.student_id, account.email, body.slice(0, 200));
+}
+
 app.post('/api/student/change-password', v32PasswordCorsGuard, async (req, res) => {
   try {
     await DQ_V32_READY;
@@ -244,7 +288,12 @@ app.post('/api/student/change-password', v32PasswordCorsGuard, async (req, res) 
     );
     await v32RevokeStudentSessions(account.student_id);
     res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });
-    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });
+    try {
+      await v32SendPasswordReadyEmailV32Integrated(account, 'change-password');
+    } catch (emailError) {
+      console.error('V32 integrated password change email warning:', emailError.message);
+    }
+    res.json({ ok: true, message: 'Password changed successfully. A confirmation email with your Student ID and Student Portal login link has been sent. Please sign in again.' });
   } catch (e) {
     console.error('V32-A change password error:', e.message);
     res.status(500).json({ error: 'Unable to change password right now.' });
@@ -313,7 +362,12 @@ app.post('/api/student/reset-password', v32PasswordCorsGuard, async (req, res) =
     } finally {
       client.release();
     }
-    res.json({ ok: true, message: 'Password reset successfully. Please sign in with your new password.' });
+    try {
+      await v32SendPasswordReadyEmailV32Integrated(account, 'reset-password');
+    } catch (emailError) {
+      console.error('V32 integrated password reset email warning:', emailError.message);
+    }
+    res.json({ ok: true, message: 'Password reset successfully. A confirmation email with your Student ID and Student Portal login link has been sent.' });
   } catch (e) {
     console.error('V32-A reset password error:', e.message);
     res.status(500).json({ error: 'Unable to reset password right now.' });
@@ -353,7 +407,12 @@ app.post('/api/student/setup-password', v32PasswordCorsGuard, async (req, res) =
     } finally {
       client.release();
     }
-    res.json({ ok: true, message: 'Password set successfully. Please sign in with your new password.' });
+    try {
+      await v32SendPasswordReadyEmailV32Integrated(account, 'setup-password');
+    } catch (emailError) {
+      console.error('V32 integrated password setup email warning:', emailError.message);
+    }
+    res.json({ ok: true, message: 'Password set successfully. A confirmation email with your Student ID and Student Portal login link has been sent.' });
   } catch (e) {
     console.error('V32-A setup password error:', e.message);
     res.status(500).json({ error: 'Unable to set password right now.' });
