@@ -111,7 +111,7 @@ if (!server.includes('DQ_V32_A2_CHANGE_EMAIL_ATTACHED')) {
       "    }",
       "    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });",
       "    // DQ_V32_A2_CHANGE_EMAIL_ATTACHED"
-    ].join('\\n');
+    ].join('\n');
     server = server.slice(0, responsePos) + replacement + server.slice(responsePos + responseText.length);
   }
 }
