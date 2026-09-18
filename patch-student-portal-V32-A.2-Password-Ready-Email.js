@@ -95,5 +95,22 @@ if (!server.includes('DQ_V32_A2_RESET_EMAIL_ATTACHED')) {
   server = server.replace(old, replacement);
 }
 
+if (!server.includes('DQ_V32_A2_CHANGE_EMAIL_ATTACHED')) {
+  const old = "    res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });\\n    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });";
+  const replacement = `    res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });
+    try {
+      await v32A2SendPasswordReadyEmail(account);
+    } catch (emailError) {
+      console.error('V32-A.2 password change email warning:', emailError.message);
+    }
+    res.json({ ok: true, message: 'Password changed successfully. A confirmation email with your Student ID and Student Portal login link has been sent. Please sign in again.' });
+    // DQ_V32_A2_CHANGE_EMAIL_ATTACHED`;
+  if (!server.includes(old)) {
+    console.error('V32-A.2 could not find change-password success response.');
+    process.exit(1);
+  }
+  server = server.replace(old, replacement);
+}
+
 fs.writeFileSync(SERVER, server, 'utf8');
 console.log('Applied Doctors Query FMGE Academy V32-A.2 password-ready confirmation email patch.');
