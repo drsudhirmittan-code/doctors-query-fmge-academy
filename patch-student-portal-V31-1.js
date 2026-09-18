@@ -14,6 +14,9 @@ if (fs.existsSync(V32_PATCH)) require(V32_PATCH);
  // Email OTP registration flow was intentionally removed. Registration returns
  // to the original details -> payment flow; V32-A secure student passwords remain active.
 
+const V32_A2_PASSWORD_READY_EMAIL_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.2-Password-Ready-Email.js');
+if (fs.existsSync(V32_A2_PASSWORD_READY_EMAIL_PATCH)) require(V32_A2_PASSWORD_READY_EMAIL_PATCH);
+
 
 const serverFile = path.join(ROOT, 'server.js');
 if (!fs.existsSync(serverFile)) process.exit(0);
