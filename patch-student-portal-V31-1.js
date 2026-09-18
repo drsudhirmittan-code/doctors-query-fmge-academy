@@ -11,11 +11,9 @@ if (fs.existsSync(V31_PATCH)) require(V31_PATCH);
 const V32_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.js');
 if (fs.existsSync(V32_PATCH)) require(V32_PATCH);
 
-// V32-A.1 is cumulative: add pre-payment email OTP verification after V32-A.
-const V32_A1_EMAIL_OTP_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.1-Email-OTP.js');
-if (fs.existsSync(V32_A1_EMAIL_OTP_PATCH)) require(V32_A1_EMAIL_OTP_PATCH);
-const V32_A1_1_DYNAMIC_OTP_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.1.1-Email-OTP-Dynamic.js');
-if (fs.existsSync(V32_A1_1_DYNAMIC_OTP_PATCH)) require(V32_A1_1_DYNAMIC_OTP_PATCH);
+ // Email OTP registration flow was intentionally removed. Registration returns
+ // to the original details -> payment flow; V32-A secure student passwords remain active.
+
 
 const serverFile = path.join(ROOT, 'server.js');
 if (!fs.existsSync(serverFile)) process.exit(0);
