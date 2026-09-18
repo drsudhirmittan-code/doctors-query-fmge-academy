@@ -96,7 +96,8 @@ if (!server.includes('DQ_V32_A2_RESET_EMAIL_ATTACHED')) {
 }
 
 if (!server.includes('DQ_V32_A2_CHANGE_EMAIL_ATTACHED')) {
-  const old = "    res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });\\n    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });";
+  const old = `    res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });
+    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });`;
   const replacement = [
     "    res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });",
     "    try {",
