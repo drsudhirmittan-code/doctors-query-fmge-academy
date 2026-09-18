@@ -89,15 +89,19 @@ if (!html.includes('DQ_V32_A1_1_DYNAMIC_EMAIL_OTP_UI')) {
       return /^\S+@\S+\.\S+$/.test(value);
     }
 
+    // V32-A.1.1 correction: students must be able to fill ALL registration
+    // details before/while verifying email. Only payment/submission is blocked
+    // until the email OTP is successfully verified.
     function lockForm(lock) {
       Array.prototype.slice.call(form.querySelectorAll('input,select,textarea,button')).forEach(function (el) {
         if (el === email || box.contains(el)) return;
-        el.disabled = lock;
+        el.disabled = !!lock;
       });
     }
 
-    lockForm(true);
-    email.disabled = false;
+    // Do NOT lock the registration form before OTP. Name, WhatsApp, country,
+    // university and year must remain editable. Server-side payment guard is
+    // the final enforcement point.
 
     send.addEventListener('click', async function () {
       var value = emailValue();
