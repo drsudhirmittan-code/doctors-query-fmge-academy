@@ -96,25 +96,24 @@ if (!server.includes('DQ_V32_A2_RESET_EMAIL_ATTACHED')) {
 }
 
 if (!server.includes('DQ_V32_A2_CHANGE_EMAIL_ATTACHED')) {
-  const old = [
-    "    res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });",
-    "    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });"
-  ].join('\\n');
-  const replacement = [
-    "    res.clearCookie('dq_student_session', { httpOnly: true, secure: true, sameSite: 'lax', path: '/' });",
-    "    try {",
-    "      await v32A2SendPasswordReadyEmail(account);",
-    "    } catch (emailError) {",
-    "      console.error('V32-A.2 password change email warning:', emailError.message);",
-    "    }",
-    "    res.json({ ok: true, message: 'Password changed successfully. A confirmation email with your Student ID and Student Portal login link has been sent. Please sign in again.' });",
-    "    // DQ_V32_A2_CHANGE_EMAIL_ATTACHED"
-  ].join('\\n');
-  if (!server.includes(old)) {
-    console.error('V32-A.2 could not find change-password success response.');
-    process.exit(1);
+  const routeStart = server.indexOf("app.post('/api/student/change-password'");
+  const responseText = "    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });";
+  const responsePos = routeStart >= 0 ? server.indexOf(responseText, routeStart) : -1;
+
+  if (responsePos === -1) {
+    console.warn('V32-A.2 could not find change-password success response; skipping confirmation-email attachment for this deployment.');
+  } else {
+    const replacement = [
+      "    try {",
+      "      await v32A2SendPasswordReadyEmail(account);",
+      "    } catch (emailError) {",
+      "      console.error('V32-A.2 password change email warning:', emailError.message);",
+      "    }",
+      "    res.json({ ok: true, message: 'Password changed successfully. Please sign in again.' });",
+      "    // DQ_V32_A2_CHANGE_EMAIL_ATTACHED"
+    ].join('\\n');
+    server = server.slice(0, responsePos) + replacement + server.slice(responsePos + responseText.length);
   }
-  server = server.replace(old, replacement);
 }
 
 fs.writeFileSync(SERVER, server, 'utf8');
