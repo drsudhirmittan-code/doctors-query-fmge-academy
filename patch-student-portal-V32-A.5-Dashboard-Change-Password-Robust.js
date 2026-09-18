@@ -17,7 +17,12 @@ if (!html.includes('DQ_V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST')) {
     try{
       const dashboard = document.getElementById('dashboard');
       if(!dashboard) return false;
-      if(document.getElementById('dq-v32-a5-dashboard-card')) return true;
+      if(dashboard.style.display === 'none') return false;
+      if(
+        document.getElementById('dq-v32-dashboard-card') ||
+        document.getElementById('dq-v32-a4-dashboard-card') ||
+        document.getElementById('dq-v32-a5-dashboard-card')
+      ) return true;
 
       const response = await fetch('/api/student/me', { credentials:'include' });
       if(!response.ok) return false;
@@ -68,10 +73,25 @@ if (!html.includes('DQ_V32_A5_DASHBOARD_CHANGE_PASSWORD_ROBUST')) {
     }
   }
 
+  // The original A5 ran only during initial page load. At that moment
+  // /api/student/me correctly returns 401 because the student has not
+  // logged in yet. Observe the existing dashboard and retry after login.
+  let attempts = 0;
+  const retry = setInterval(async function(){
+    attempts += 1;
+    const done = await installV32A5();
+    if(done || attempts >= 120) clearInterval(retry);
+  }, 1000);
+
+  const dashboard = document.getElementById('dashboard');
+  if(dashboard){
+    const observer = new MutationObserver(function(){
+      installV32A5();
+    });
+    observer.observe(dashboard, { attributes:true, attributeFilter:['style'] });
+  }
+
   installV32A5();
-  setTimeout(installV32A5, 300);
-  setTimeout(installV32A5, 1000);
-  setTimeout(installV32A5, 2000);
 })();
 </script>
 `;
