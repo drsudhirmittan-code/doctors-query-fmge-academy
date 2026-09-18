@@ -60,7 +60,7 @@ async function v32A2SendPasswordReadyEmail(account) {
     console.error('V32-A.2 could not find setup-password route.');
     process.exit(1);
   }
-  server = server.replace(anchor, helper + '\\n' + anchor);
+  server = server.replace(anchor, helper + '\n' + anchor);
 }
 
 if (!server.includes('DQ_V32_A2_SETUP_EMAIL_ATTACHED')) {
