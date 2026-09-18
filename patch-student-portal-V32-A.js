@@ -12,8 +12,7 @@ let server = fs.readFileSync(serverFile, 'utf8');
 
 if (server.includes('DQ_STUDENT_PORTAL_V32_A')) {
   console.log('Doctors Query FMGE Academy V32-A already applied.');
-  process.exit(0);
-}
+} else {
 
 const marker = '// DQ_STUDENT_PORTAL_V32_A';
 const v32 = `
@@ -567,3 +566,4 @@ if (fs.existsSync(studentFile)) {
 }
 
 console.log('Applied Doctors Query FMGE Academy V32-A secure password patch.');
+}
