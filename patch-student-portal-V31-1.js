@@ -18,6 +18,8 @@ const V32_A2_PASSWORD_READY_EMAIL_PATCH = path.join(ROOT, 'patch-student-portal-
 if (fs.existsSync(V32_A2_PASSWORD_READY_EMAIL_PATCH)) require(V32_A2_PASSWORD_READY_EMAIL_PATCH);
 const V32_A3_CHANGE_PASSWORD_VISIBILITY_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.3-Change-Password-Visibility.js');
 if (fs.existsSync(V32_A3_CHANGE_PASSWORD_VISIBILITY_PATCH)) require(V32_A3_CHANGE_PASSWORD_VISIBILITY_PATCH);
+const V32_A4_DASHBOARD_CHANGE_PASSWORD_PATCH = path.join(ROOT, 'patch-student-portal-V32-A.4-Dashboard-Change-Password.js');
+if (fs.existsSync(V32_A4_DASHBOARD_CHANGE_PASSWORD_PATCH)) require(V32_A4_DASHBOARD_CHANGE_PASSWORD_PATCH);
 
 
 const serverFile = path.join(ROOT, 'server.js');
