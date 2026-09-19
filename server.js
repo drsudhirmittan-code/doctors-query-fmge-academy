@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
 const path = require('path');
+try { require(path.join(__dirname, 'patch-student-portal-V32-A.7-Admin-Student-Recovery.js')); } catch (e) { console.error('V32-A.7 patch load warning:', e.message); }
 const Razorpay = require('razorpay');
 const { Pool } = require('pg');
 
